@@ -23,12 +23,11 @@
 
             var w = 500
             var h = 500
-            var r = 1.5
+            var r = 2  // 1.5
 
             var test1 = "H12_1"
             var test2 = "DDAF_1"
-            var test3 = "H2_1"
-            var test4 = "DDAF_1"
+            var test3 = "DDAF_1"
 
             // Color Mapping
             var colors = {
@@ -60,11 +59,12 @@
                         return Math.floor(d["H1_1"]*1000);
                     })
                     .attr("cy", function(d){
-                        return h-Math.floor(d[test3]*4000);
+                        return h-Math.floor(d["H2_1"]*4000);
                     })
                     .attr("r", function(d){
                         return r
                     })
+                    .attr("opacity", "0.5")
                     .style("fill", function(d){
                         return colors[d["sclass"]]
                     })
@@ -77,11 +77,12 @@
                             return Math.floor(d["H1_1"]*1000);
                         })
                         .attr("cy", function(d){
-                            return h-Math.floor(d[test4]*500);
+                            return h-Math.floor(d[test3]*500);
                         })
                         .attr("r", function(d){
                             return r
                         })
+                        .attr("opacity", "0.5")
                         .style("fill", function(d){
                             return colors[d["sclass"]]
                     })

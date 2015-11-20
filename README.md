@@ -16,7 +16,7 @@ Based on unpublished work.
 
 ## Background
 
-Population geneticists often use summary statistics to test for selection in the genome, and often scan the genome using multiple summary statistics that capture different signals in genetic variation. However, most studies do not distinguish between different modes of selection (neutral vs hard sweeps vs soft sweeps), and individual summary statistics do not have enough dimensions on which to separate out these different classes. Here, we use simulated data to visualize the histograms of summary statistics for different modes of selection, and visualize the scatterplots between pairs of summary statistics to see how well different modes of selection are separated in different views of the data.
+Population geneticists often use summary statistics to test for selection in the genome, and often scan the genome using multiple summary statistics that capture different signals in genetic variation. However, most studies do not distinguish between different modes of selection (neutral vs hard sweeps vs soft sweeps), and individual summary statistics do not have enough dimensions on which to separate out these different classes. Here, we use simulated data to visualize the histograms of summary statistics for different modes of selection, and visualize the scatterplots between pairs of summary statistics to see how well modes of selection are separated in different views of the data.
 
 <!---Examples of previous visualizations of similar data or processes, if any exist... Include links or add images to markdown document... how were data mapped to aesthetics in these previous approaches? Was there filtering?--->
 

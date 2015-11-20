@@ -25,7 +25,10 @@
             var h = 500
             var r = 1.5
 
-            var test = "H12_1";
+            var test1 = "H12_1"
+            var test2 = "DDAF_1"
+            var test3 = "H2_1"
+            var test4 = "DDAF_1"
 
             // Color Mapping
             var colors = {
@@ -43,20 +46,21 @@
                 var body = d3.select("body")
 
                 // Scatterplot
-                body.append("p").text("Scatterplot")
+                var click1 = body.append("p")
+                click1.text("Scatterplot")
                 var svg = body.append("svg")
-                    .attr("width", w)
+                svg.attr("width", w)
                     .attr("height", h)
 
                 var circles = svg.selectAll("circle")
-                    .data(dataset)
+                circles.data(dataset)
                     .enter()
                     .append("circle")
                     .attr("cx", function(d){
                         return Math.floor(d["H1_1"]*1000);
                     })
                     .attr("cy", function(d){
-                        return h-Math.floor(d["H2_1"]*4000);
+                        return h-Math.floor(d[test3]*4000);
                     })
                     .attr("r", function(d){
                         return r
@@ -65,19 +69,51 @@
                         return colors[d["sclass"]]
                     })
 
+                svg.on("click", function(){
+                    svg.selectAll("circle")
+                        .data(dataset)
+                        .transition()
+                        .attr("cx", function(d){
+                            return Math.floor(d["H1_1"]*1000);
+                        })
+                        .attr("cy", function(d){
+                            return h-Math.floor(d[test4]*500);
+                        })
+                        .attr("r", function(d){
+                            return r
+                        })
+                        .style("fill", function(d){
+                            return colors[d["sclass"]]
+                    })
+                })
+
                 // Histogram
-                body.append("p").text("Histogram")
-                d3.select("body").selectAll("div")
+                var click2 = body.append("p")
+                click2.text("Histogram")
+                body.selectAll("div")
                     .data(dataset)
                     .enter()
                     .append("div")
                     .attr("class", "bar")
                     .style("height", function(d){
-                        return Math.floor(d[test]*50)+"px";
+                        return Math.floor(d[test1]*100)+"px";
                     })
                     .style("background-color", function(d){
                         return colors[d["sclass"]]
                     })
+
+                body.on("click", function(){
+                    body.selectAll("div")
+                        .data(dataset)
+                        .transition()
+                        .attr("class", "bar")
+                        .style("height", function(d){
+                            return Math.floor(d[test2]*75)+"px";
+                        })
+                        .style("background-color", function(d){
+                            return colors[d["sclass"]]
+                        })
+                })
             })
 
         </script>

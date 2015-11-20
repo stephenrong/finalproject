@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a final project for the [Interacting with Data](https://github.com/Brown-BIOL2430-S04-Fall2015/syllabus) seminar in fall 2015. This project visualizes the relationships between different population genetic summary statistics for inferring selection in the genome, using a simulated dataset with examples of SNPs under neutrality, hard sweeps, linked to hard sweeps, soft sweeps, and linked to soft sweeps.
+This is a final project for the [Interacting with Data](https://github.com/Brown-BIOL2430-S04-Fall2015/syllabus) seminar in fall 2015. This project visualizes the relationships between different population genetic summary statistics for inferring selection in the genome, using a simulated dataset with examples of sites evolving under neutrality, hard sweeps, linked to hard sweeps, soft sweeps, and linked to soft sweeps along with their summary statistics.
 
 To view this project, ... (will finish later). 
 
@@ -10,13 +10,13 @@ To view this project, ... (will finish later).
 
 ## The data
 
-The dataset of summary statistics for sites evolving under models of neutrality, hard sweeps (selective sweeps from *de novo* mutations), and soft sweeps (selective sweeps from standing genetic variation) were simulated using the population genetic simulator *msms* (Ewing and Hermisson 2010) based on the human demographic model from Gravel et al. (2011). A representative subset of 2500 sites for each of five classes (neutral, hard sweep, linked to hard sweeps, soft sweeps, linked to soft sweeps) were used to make the visualization. Each row in the dataset corresponds to a simulated SNP, where the first column is the class label for the SNP, and the remaining columns are population genetic summary statistics for inferring selection at the SNP. Summary statistics include estimators of the population mutation rate theta, site frequency spectrum tests, linkage disequlibrium tests, population differentiation tests, haplotype frequency spectrum tests, and extended haplotype homozygosity (EHH) computed using the software *selscan* (Szpiech and Hernandez 2014). 
+The dataset of summary statistics for sites evolving under models of neutrality, hard sweeps (selective sweeps from *de novo* mutations), and soft sweeps (selective sweeps from standing genetic variation) were simulated using the population genetic simulator *msms* (Ewing and Hermisson 2010) based on the human demographic model from Gravel et al. (2011). A representative subset of 2500 sites for each of five classes (neutral, hard sweep, linked to hard sweeps, soft sweeps, linked to soft sweeps) were used to make the visualization. Each row in the dataset corresponds to a simulated SNP, where the first column is the class label for the site, and the remaining columns are population genetic summary statistics for inferring selection at the SNP. Summary statistics include estimators of the population mutation rate theta, site frequency spectrum tests, linkage disequlibrium tests, population differentiation tests, haplotype frequency spectrum tests, and extended haplotype homozygosity (EHH) computed using the software *selscan* (Szpiech and Hernandez 2014). 
 
 Based on unpublished work.
 
 ## Background
 
-
+Population geneticists often use summary statistics to test for selection in the genome, and often scan the genome using multiple summary statistics that capture different signals in genetic variation. However, most studies do not distinguish between different modes of selection (neutral vs hard sweeps vs soft sweeps), and individual summary statistics do not have enough dimensions on which to separate out these different classes. Here, we use simulated data to visualize the histograms of summary statistics for different modes of selection, and visualize the scatterplots between pairs of summary statistics to see how well different modes of selection are separated in different views of the data.
 
 <!---Examples of previous visualizations of similar data or processes, if any exist... Include links or add images to markdown document... how were data mapped to aesthetics in these previous approaches? Was there filtering?--->
 
@@ -25,6 +25,8 @@ Based on unpublished work.
 ## This project
 
 ### Mapping of data to aesthetics
+
+
 
 <!---How will aesthetic attributes ( X / Y / color / shape / size /texture / etc ) will be mapped to the data?--->
 

@@ -5,6 +5,9 @@
         <title>D3 Page Template</title>
         <script type="text/javascript" src="d3/d3.js"></script>
         <style type="text/css">
+            p {
+                font-family: verdana;
+            }
             div.bar {
                 display: inline-block;
                 width: 1px;
@@ -18,36 +21,32 @@
         <script type="text/javascript">
             // Your beautiful D3 code will go here
 
-            var w = 500;
-            var h = 500;
-            var r = 1.5;
-            var test = "H12_1"
+            var w = 500
+            var h = 500
+            var r = 1.5
 
-            var colors = function(s) {
-                if (s == "ne") {
-                    return "#D4A2E1"
-                } else if (s == "hs") {
-                    return "#ECBB3D"
-                } else if (s == "hl") {
-                    return "#C1DD45"
-                } else if (s == "ss") {
-                    return "#55E0C6"
-                } else if (s == "sl") {
-                    return "#73E162"
-                }
+            var test = "H12_1";
+
+            // Color Mapping
+            var colors = {
+                "ne": "#D4A2E1",
+                "hs": "#ECBB3D",
+                "hl": "#C1DD45",
+                "ss": "#55E0C6",
+                "sl": "#73E162"
             }
 
-            var dataset;
+            var dataset
             d3.tsv("trainingsetPost.txt", function(error, data) {
                 dataset = data
                 console.log(dataset)
+                var body = d3.select("body")
 
-                var svg = d3.select("body")
-                    .append("svg")
+                // Scatterplot
+                body.append("p").text("Scatterplot")
+                var svg = body.append("svg")
                     .attr("width", w)
-                    .attr("height", h);
-
-                d3.select("body").append("div")
+                    .attr("height", h)
 
                 var circles = svg.selectAll("circle")
                     .data(dataset)
@@ -60,24 +59,26 @@
                         return h-Math.floor(d["H2_1"]*4000);
                     })
                     .attr("r", function(d){
-                        return r;
+                        return r
                     })
                     .style("fill", function(d){
-                        return colors(d["sclass"])
-                    });
+                        return colors[d["sclass"]]
+                    })
 
+                // Histogram
+                body.append("p").text("Histogram")
                 d3.select("body").selectAll("div")
                     .data(dataset)
                     .enter()
                     .append("div")
                     .attr("class", "bar")
                     .style("height", function(d){
-                        return Math.floor(d[test]*100)+"px";
+                        return Math.floor(d[test]*50)+"px";
                     })
                     .style("background-color", function(d){
-                        return colors(d["sclass"])
-                    });
-            });
+                        return colors[d["sclass"]]
+                    })
+            })
 
         </script>
     </body>

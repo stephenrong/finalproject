@@ -2,7 +2,11 @@
 
 ## Introduction
 
-This is a final project for the [Interacting with Data](https://github.com/Brown-BIOL2430-S04-Fall2015/syllabus) seminar in fall 2015. This project visualizes the relationships between different population genetic summary statistics for inferring selection in the genome, using a simulated dataset with examples of sites evolving under neutrality, hard sweeps, linked to hard sweeps, soft sweeps, and linked to soft sweeps along with their summary statistics.
+This is a final project for the [Interacting with Data](https://github.com/Brown-BIOL2430-S04-Fall2015/syllabus) seminar in fall 2015. 
+
+
+
+This project visualizes the relationships between different population genetic summary statistics for inferring selection in the genome, using a simulated dataset with examples of sites evolving under neutrality, hard sweeps, linked to hard sweeps, soft sweeps, and linked to soft sweeps along with their summary statistics.
 
 To view this project, ... (will finish later). 
 

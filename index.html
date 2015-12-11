@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <!--Stephen Rong, Biol 2430: Final Project-->
-<!--Based on Mike Bostock's Parallel Coordinates: http://bl.ocks.org/mbostock/1341021-->
 
 <html lang="en">
     <head>
@@ -8,7 +7,10 @@
         <title>D3 Page Template</title>
         <script type="text/javascript" src="d3/d3.js"></script>
         <style type="text/css">
-            /*p {font-family: verdana;}*/
+            p {                
+                display: inline-block;
+                margin-right: 1em;
+            }
             .axis line,
             .axis path {
                 fill: none;
@@ -18,19 +20,15 @@
             .axis text {
                 text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
             }
-            /*.neutral path {
-                fill: none;
-                stroke: #D4A2E1;
-                shape-rendering: crispEdges;
-            }*/
         </style>
     </head>
     <body>
+        <h1>Summary Statistics for Selection - Stephen Rong - Biol 2430: Interacting with Data</h1>
         <script type="text/javascript">
             // Preliminaries
             var body = d3.select("body")
             var margin = {top: 30, right: 10, bottom: 10, left: 10}
-            var w = 1500 //960
+            var w = 1200 //1500 //960
             var h = 500
             var padding = 100
             var width = w - margin.left - margin.right
@@ -39,7 +37,8 @@
             var labely = 25
             var missingy = 50
             var r = 4
-            var o = 0.7
+            var o = 0.6
+            var legendy = 60
 
             // Label Mapping
             var cols = {"DAF_1": "DAF", 
@@ -88,9 +87,7 @@
             // Data Variables
             var data_ne, data_hs, data_hl, data_ss, data_sl
             // Data Labels
-            // var label = {"ne": "Neutral", "hs": "Hard Sweeps", "hl": "Linked to Hard Sweeps", "ss": "Soft Sweeps", "sl": "Linked to Soft Sweeps"}
-            // Data Mapping
-            // var data = {"ne": data_ne, "hs": data_hs, "hl": data_hl, "ss": data_ss, "sl": data_sl}
+            var label = ["Neutral", "Hard Sweeps", "Linked to Hard Sweeps", "Soft Sweeps", "Linked to Soft Sweeps"]
             // Data Coloring
             var color = {"ne": "#D4A2E1", "hs": "#ECBB3D", "hl": "#C1DD45", "ss": "#55E0C6", "sl": "#73E162"}
 
@@ -120,8 +117,8 @@
             // Main
             function main() {
                 // Preliminaries
-                var heading = body.append("p")
-                    .text("Visualizing Summary Statistics for Selection - Stephen Rong - Biol 2430: Interacting with Data")
+                // var heading = body.append("p")
+                //     .text("Visualizing Summary Statistics for Selection - Stephen Rong - Biol 2430: Interacting with Data")
 
                 var svg = body.append("svg")
                     .attr("width", w)
@@ -137,7 +134,7 @@
                 var keylist = d3.keys(data_ne[0])
                 keylist.splice(keylist.indexOf("sclass"), 1)
                 keylist.splice(keylist.indexOf("MAF_1"), 1)
-                keylist.splice(keylist.indexOf("DAF_1"), 1)
+                keylist.splice(keylist.indexOf("DAF_1"), 1)  // DDAF bug
                 keylist.splice(keylist.indexOf("Theta1Pi_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1S_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1H_1"), 1)
@@ -148,9 +145,13 @@
                 keylist.splice(keylist.indexOf("FuLiD1_1"), 1)
                 keylist.splice(keylist.indexOf("FayWuH1_1"), 1)
                 keylist.splice(keylist.indexOf("ZengE1_1"), 1)
+                keylist.splice(keylist.indexOf("iHH0_1"), 1)
+                keylist.splice(keylist.indexOf("iHH1_1"), 1)
+                keylist.splice(keylist.indexOf("SL0_1"), 1)
+                keylist.splice(keylist.indexOf("SL1_1"), 1)
 
                 // Temporary Lists
-                var keylisttemp = ["H1_1", "TajD_1", "DXPEHH_12", "FST_1"]
+                var keylisttemp = ["H2_1", "TajD_1", "ZA_1", "XPEHH_12", "FST_1"]
                 //["H1_1", "H2_1", "H2.H1_1", "TajD_1", "FayWuH_1", "XPEHH_12", "DXPEHH_12", "FST_1", "DDAF_1", "ZA_1"]
                 var keylistcomp = keylist.slice()
                 for (i = 0; i < keylisttemp.length; i++) {
@@ -305,7 +306,48 @@
                     }
                 }
 
-                // 
+                // Legend
+                // for (j = 0; j < 5; j++) {
+                //     svg.append("circle")
+                //         .attr("cx", function(d) {
+                //             return xscale((j+2)/9)
+                //         })
+                //         .attr("cy", legendy)
+                //         .attr("r", r)
+                //         .attr("opacity", 1)
+                //         .style("fill", function(d){
+                //             return d3.values(color)[j]
+                //         })
+
+                //     svg.append("text")
+                //         .attr("x", function(d) {
+                //             return xscale((j+2)/9)+5
+                //         })
+                //         .attr("y", legendy+4)
+                //         .attr("font-size", 12)
+                //         .text(label[j])
+                // }
+
+                // for (j = 0; j < 5; j++) {
+                //     svg.append("circle")
+                //         .attr("cx", function(d) {
+                //             return xscale((j+1)/6.5)
+                //         })
+                //         .attr("cy", legendy)
+                //         .attr("r", r)
+                //         .attr("opacity", 1)
+                //         .style("fill", function(d){
+                //             return d3.values(color)[j]
+                //         })
+
+                //     svg.append("text")
+                //         .attr("x", function(d) {
+                //             return xscale((j+1)/6.5)+6
+                //         })
+                //         .attr("y", legendy)
+                //         .attr("font-size", 12)
+                //         .text(label[j])
+                // }
 
                 // Transitions
                 // Click on Label
@@ -451,6 +493,19 @@
                         })
                 }
                 clickAxis()
+
+                // Aesthetic Effects
+                // circles.on("mouseover", function() {
+                //     d3.select(this)
+                //         .attr("r", 1.5*r)
+                //         .attr("opacity", 1)
+                // })
+
+                // circles.on("mouseout", function() {
+                //     d3.select(this)
+                //         .attr("r", r)
+                //         .attr("opacity", o)
+                // })
             }
         </script>
     </body>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!--Stephen Rong, Biol 2430: Final Project-->
+<!--Based on Mike Bostock's Parallel Coordinates: http://bl.ocks.org/mbostock/1341021-->
 
 <html lang="en">
     <head>
@@ -10,13 +11,18 @@
             /*p {font-family: verdana;}*/
             .axis line,
             .axis path {
-              fill: none;
-              stroke: #000;
-              shape-rendering: crispEdges;
+                fill: none;
+                stroke: #000;
+                shape-rendering: crispEdges;
             },
             .axis text {
-              text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+                text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
             }
+            /*.neutral path {
+                fill: none;
+                stroke: #D4A2E1;
+                shape-rendering: crispEdges;
+            }*/
         </style>
     </head>
     <body>
@@ -24,19 +30,22 @@
             // Preliminaries
             var body = d3.select("body")
             var margin = {top: 30, right: 10, bottom: 10, left: 10}
-            var w = 960
+            var w = 1500 //960
             var h = 500
             var padding = 100
             var width = w - margin.left - margin.right
             var height = h - margin.top - margin.bottom
             var labelx = 25
             var labely = 25
+            var missingy = 50
+            var r = 3
+            var o = 0.7
 
             // Label Mapping
             var cols = {"DAF_1": "DAF", 
                 "MAF_1": "MAF", 
                 "DDAF_1": "ΔDAF", 
-                "FST_1": "FST", 
+                "FST_1": "F_ST", 
                 "ThetaPi_1": "θ_π", 
                 "ThetaS_1": "θ_S", 
                 "ThetaH_1": "θ_H", 
@@ -79,9 +88,9 @@
             // Data Variables
             var data_ne, data_hs, data_hl, data_ss, data_sl
             // Data Labels
-            var label = {"ne": "Neutral", "hs": "Hard Sweeps", "hl": "Linked to Hard Sweeps", "ss": "Soft Sweeps", "sl": "Linked to Soft Sweeps"}
+            // var label = {"ne": "Neutral", "hs": "Hard Sweeps", "hl": "Linked to Hard Sweeps", "ss": "Soft Sweeps", "sl": "Linked to Soft Sweeps"}
             // Data Mapping
-            var data = {"ne": data_ne, "hs": data_hs, "hl": data_hl, "ss": data_ss, "sl": data_sl}
+            // var data = {"ne": data_ne, "hs": data_hs, "hl": data_hl, "ss": data_ss, "sl": data_sl}
             // Data Coloring
             var color = {"ne": "#D4A2E1", "hs": "#ECBB3D", "hl": "#C1DD45", "ss": "#55E0C6", "sl": "#73E162"}
 
@@ -120,8 +129,9 @@
                 var xscale = d3.scale.linear().domain([0, 1]).range([padding, w-padding])
                 var yscale = d3.scale.linear().domain([-1, 1]).range([h-padding, padding])
 
-                datafull = data_ne.concat(data_hs).concat(data_hl).concat(data_ss).concat(data_sl)
-                // console.log(datafull)
+                var datafull = data_ne.concat(data_hs).concat(data_hl).concat(data_ss).concat(data_sl)
+                var datalist = [data_ne, data_hs, data_hl, data_ss, data_sl]
+                // console.log(datalist)
 
                 // List of Summary Statistics
                 var keylist = d3.keys(data_ne[0])
@@ -135,13 +145,32 @@
                 keylist.splice(keylist.indexOf("Theta1Xi_1"), 1)
 
                 // Temporary Lists
-                var keylisttemp = ["FST_1", "TajD_1", "H1_1", "DXPEHH_12"]
+                var keylisttemp = ["H1_1", "TajD_1", "DXPEHH_12", "FST_1"]
+                //["H1_1", "H2_1", "H2.H1_1", "TajD_1", "FayWuH_1", "XPEHH_12", "DXPEHH_12", "FST_1", "DDAF_1", "ZA_1"]
                 var keylistcomp = keylist.slice()
                 for (i = 0; i < keylisttemp.length; i++) {
                     keylistcomp.splice(keylistcomp.indexOf(keylisttemp[i]), 1)
                 }
                 // console.log(keylisttemp)
                 // console.log(keylistcomp)
+
+                // Scales
+                var scalelist = []
+                for (i = 0; i < keylist.length; i++) {
+                    var max = d3.max(datafull, function(d) {
+                        if (d[keylist[i]] != "NA") {
+                            return parseFloat(d[keylist[i]])
+                        }
+                    })
+                    var min = d3.min(datafull, function(d) {
+                        return parseFloat(d[keylist[i]])
+                    })
+                    // console.log(keylist[i])
+                    // console.log(max)
+                    // console.log(min)
+
+                    scalelist.push(d3.scale.linear().domain([min, max]).range([h-padding, padding]))
+                }
 
                 // Axes
                 var axeslist = []
@@ -154,13 +183,13 @@
                     min = d3.min(datafull, function(d) {
                         return d[keylist[i]]
                     })
-                    console.log(keylist[i])
-                    console.log(max)
-                    console.log(min)
+                    // console.log(keylist[i])
+                    // console.log(max)
+                    // console.log(min)
 
                     axeslist.push(
                         d3.svg.axis()
-                            .scale(d3.scale.linear().domain([min, max]).range([h-padding, padding]))
+                            .scale(scalelist[i])
                             .orient("left")
                             .ticks(5)
                     )
@@ -216,6 +245,20 @@
                         .text(cols[keylistcomp[i]])
                 }
 
+                // Missing Line
+                svg.append("line")
+                    .attr("x1", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+                    .attr("x2", (xscale((keylisttemp.length)/(keylisttemp.length+1))+r*(1+4*3)))
+                    .attr("y1", (h-padding+missingy))
+                    .attr("y2", (h-padding+missingy))
+                    .attr("stroke-width", 1)
+                    .attr("stroke", "#000")
+
+                svg.append("text")
+                    .attr("x", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+                    .attr("y", (h-padding+missingy)+15)
+                    .text("missing values")
+
                 // List
                 body.selectAll("p")
                     .data(keylistcomp)
@@ -225,7 +268,33 @@
                         return d //cols[d] //because of header text
                     })
 
-
+                // Points
+                var circles = svg.selectAll("circle")
+                for (j = 0; j < 5; j++) {
+                    var datatemp = datalist[j]
+                    for (i = 0; i < keylisttemp.length; i++) {
+                        circles.data(datatemp)
+                            .enter()
+                            .append("circle")
+                            .attr("cx", function(d){
+                                return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
+                            })
+                            .attr("cy", function(d){
+                                scale = scalelist[keylist.indexOf(keylisttemp[i])]
+                                yvalue = d[keylisttemp[i]]
+                                if (yvalue != "NA") {
+                                    return scale(yvalue)
+                                } else {
+                                    return h-padding+missingy
+                                }
+                            })
+                            .attr("r", r)
+                            .attr("opacity", o)
+                            .style("fill", function(d){
+                                return d3.values(color)[j]
+                            })
+                    }
+                }
 
 
 
@@ -238,8 +307,6 @@
 
 
                 // Transitions
-                // gaxes = svg.selectAll("g")
-
                 // Click on Label
                 body.selectAll("p")
                     .on("click", function() {
@@ -274,7 +341,7 @@
                         temp = this.getAttribute("class").split(" ")[0]
                         if (temp != "tick") {
                             value = temp
-                            console.log(value)
+                            // console.log(value)
 
                             body.append("p")
                                 .text(value)
@@ -291,8 +358,8 @@
                             keylisttemp.splice(keylisttemp.indexOf(value), 1)
                             axescomp.push(axeslist[keylist.indexOf(keylistcomp[keylistcomp.length-1])])
                             axestemp.splice(axestemp.indexOf(value), 1)
-                            console.log(keylisttemp)
-                            console.log(keylistcomp)
+                            // console.log(keylisttemp)
+                            // console.log(keylistcomp)
 
                             for (i = 0; i < keylisttemp.length; i++) {
                                 svg.select("."+keylisttemp[i]+".axis")

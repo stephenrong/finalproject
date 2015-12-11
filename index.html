@@ -285,7 +285,7 @@
                             .enter()
                             .append("circle")
                             //.attr("class", keylisttemp[i]+" group")
-                            .attr("class", keylisttemp[i]+j+" group")
+                            .attr("class", keylisttemp[i]+"__"+j+" group")
                             .attr("cx", function(d){
                                 return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
                             })
@@ -303,6 +303,9 @@
                             .style("fill", function(d){
                                 return d3.values(color)[j]
                             })
+                            .attr("index", function(d, i){
+                                return i
+                            })
                     }
                 }
 
@@ -311,7 +314,7 @@
                     svg.append("circle")
                         .attr("cx", 150)
                         .attr("cy", function() {
-                            return 20+14*j
+                            return 20+15*j
                         })
                         .attr("r", r)
                         .attr("opacity", 1)
@@ -322,7 +325,7 @@
                     svg.append("text")
                         .attr("x", 150+5)
                         .attr("y", function() {
-                            return 20+4+14*j
+                            return 20+4+15*j
                         })
                         //.attr("font-size", 12)
                         .text(label[j])
@@ -359,7 +362,7 @@
 
                             for (j = 0; j < 5; j++) {
                                 for (i = 0; i < keylisttemp.length; i++) {
-                                    svg.selectAll("."+keylisttemp[i]+j+".group")
+                                    svg.selectAll("."+keylisttemp[i]+"__"+j+".group")
                                         .transition()
                                         .attr("cx", (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3)))
                                 }
@@ -372,7 +375,7 @@
                                     .enter()
                                     .append("circle")
                                     //.attr("class", keylisttemp[i]+" group")
-                                    .attr("class", keylisttemp[i]+j+" group")
+                                    .attr("class", keylisttemp[i]+"__"+j+" group")
                                     .attr("cx", function(d){
                                         return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
                                     })
@@ -389,6 +392,9 @@
                                     .attr("opacity", o)
                                     .style("fill", function(d){
                                         return d3.values(color)[j]
+                                    })
+                                    .attr("index", function(d, i){
+                                        return i
                                     })
                             }
 
@@ -427,7 +433,7 @@
                                     .attr("x", -100-labelx)
 
                                 for (j = 0; j < 5; j++) {
-                                    d3.selectAll("."+value+j+".group")
+                                    d3.selectAll("."+value+"__"+j+".group")
                                         .remove()
                                 }
 
@@ -452,7 +458,7 @@
 
                                 for (j = 0; j < 5; j++) {
                                     for (i = 0; i < keylisttemp.length; i++) {
-                                        svg.selectAll("."+keylisttemp[i]+j+".group")
+                                        svg.selectAll("."+keylisttemp[i]+"__"+j+".group")
                                             .transition()
                                             .attr("cx", (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3)))
                                     }
@@ -473,13 +479,54 @@
                 }
                 clickAxis()
 
-                // Aesthetic Effects
-                // d3.selectAll(keylisttemp[1]+1+" group").on("mouseover", function() {
-                //     d3.select(this)
-                //         .transition()
-                //         .attr("r", 10*r)
-                //         .attr("opacity", 1)
-                // })
+                // Linking Effects
+                svg.selectAll("circle").on("mouseover", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(150)
+                        .attr("r", 3*r)
+                        .attr("opacity", 1)
+
+                    temp = this.getAttribute("class").split(" ")[0].split("__")
+                    value = temp[0]
+                    j = temp[1]
+                    k = this.getAttribute("index")
+
+                    for (i = 0; i < keylisttemp.length; i++) {
+                        circles.data([0])
+                            .enter()
+                            .append("circle")
+                            .attr("class", "links")
+                            .attr("cx", function(d) {
+                                return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
+                            })
+                            .attr("cy", function(d) {
+                                scale = scalelist[keylist.indexOf(keylisttemp[i])]
+                                yvalue = datalist[j][k][keylisttemp[i]]
+                                if (yvalue != "NA") {
+                                    return scale(yvalue)
+                                } else {
+                                    return h-padding+missingy
+                                }
+                            })
+                            .attr("r", 3*r)
+                            .attr("opacity", 1)
+                            .style("fill", function(d){
+                                return d3.values(color)[j]
+                            })
+                    }
+                })
+
+                svg.selectAll("circle").on("mouseout", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(150)
+                        .attr("r", r)
+                        .attr("opacity", o)
+
+                    d3.selectAll(".links")
+                        .remove()
+                })
             }
         </script>
     </body>

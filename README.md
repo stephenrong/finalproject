@@ -62,7 +62,7 @@ Transitions are used to ensure continuity between different views of the data ba
 
 ### Perspective
 
-All the axes can be removed or added in any order to the visualization, allowing quick changes in views of the data, such as changing which axes comparisons are being made locally and globally, and how much information is visualized on the graph.
+All the axes can be removed or added in any order to the visualization, allowing quick changes in views of the data, such as changing which axes comparisons are being made locally and globally, and varying the amount of information being visualized on the graph.
 
 <!---To what extent is perspective (eg mappings) controlled by users vs hard coded in advance? How does this project aid in exploration vs exposition?--->
 

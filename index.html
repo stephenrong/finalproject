@@ -134,7 +134,7 @@
                 var keylist = d3.keys(data_ne[0])
                 keylist.splice(keylist.indexOf("sclass"), 1)
                 keylist.splice(keylist.indexOf("MAF_1"), 1)
-                keylist.splice(keylist.indexOf("DAF_1"), 1)  // DDAF bug
+                // keylist.splice(keylist.indexOf("DAF_1"), 1)  // DDAF bug
                 keylist.splice(keylist.indexOf("Theta1Pi_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1S_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1H_1"), 1)
@@ -151,7 +151,7 @@
                 keylist.splice(keylist.indexOf("SL1_1"), 1)
 
                 // Temporary Lists
-                var keylisttemp = ["H2_1", "TajD_1", "ZA_1", "XPEHH_12", "FST_1"]
+                var keylisttemp = ["DAF_1", "TajD_1", "FayWuH_1", "FST_1", "iHS_1"]
                 //["H1_1", "H2_1", "H2.H1_1", "TajD_1", "FayWuH_1", "XPEHH_12", "DXPEHH_12", "FST_1", "DDAF_1", "ZA_1"]
                 var keylistcomp = keylist.slice()
                 for (i = 0; i < keylisttemp.length; i++) {
@@ -408,6 +408,8 @@
                                 .attr("x", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
 
                             clickAxis()
+                            linkOn()
+                            linkOff()
                         })
                 }
                 clickLabel()
@@ -480,53 +482,61 @@
                 clickAxis()
 
                 // Linking Effects
-                svg.selectAll("circle").on("mouseover", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(150)
-                        .attr("r", 3*r)
-                        .attr("opacity", 1)
-
-                    temp = this.getAttribute("class").split(" ")[0].split("__")
-                    value = temp[0]
-                    j = temp[1]
-                    k = this.getAttribute("index")
-
-                    for (i = 0; i < keylisttemp.length; i++) {
-                        circles.data([0])
-                            .enter()
-                            .append("circle")
-                            .attr("class", "links")
-                            .attr("cx", function(d) {
-                                return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
-                            })
-                            .attr("cy", function(d) {
-                                scale = scalelist[keylist.indexOf(keylisttemp[i])]
-                                yvalue = datalist[j][k][keylisttemp[i]]
-                                if (yvalue != "NA") {
-                                    return scale(yvalue)
-                                } else {
-                                    return h-padding+missingy
-                                }
-                            })
+                function linkOn() {
+                    svg.selectAll("circle").on("mouseover", function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(150)
                             .attr("r", 3*r)
                             .attr("opacity", 1)
-                            .style("fill", function(d){
-                                return d3.values(color)[j]
-                            })
-                    }
-                })
 
-                svg.selectAll("circle").on("mouseout", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(150)
-                        .attr("r", r)
-                        .attr("opacity", o)
+                        temp = this.getAttribute("class").split(" ")[0].split("__")
+                        value = temp[0]
+                        j = temp[1]
+                        k = this.getAttribute("index")
 
-                    d3.selectAll(".links")
-                        .remove()
-                })
+                        for (i = 0; i < keylisttemp.length; i++) {
+                            circles.data([0])
+                                .enter()
+                                .append("circle")
+                                .attr("class", "links")
+                                .attr("cx", function(d) {
+                                    return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
+                                })
+                                .attr("cy", function(d) {
+                                    scale = scalelist[keylist.indexOf(keylisttemp[i])]
+                                    yvalue = datalist[j][k][keylisttemp[i]]
+                                    if (yvalue != "NA") {
+                                        return scale(yvalue)
+                                    } else {
+                                        return h-padding+missingy
+                                    }
+                                })
+                                .attr("r", 3*r)
+                                .attr("opacity", 1)
+                                .style("fill", function(d){
+                                    return d3.values(color)[j]
+                                })
+                        }
+                    })
+                }
+                linkOn()
+
+                function linkOff() {
+                    svg.selectAll("circle").on("mouseout", function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(150)
+                            .attr("r", r)
+                            .attr("opacity", o)
+
+                        d3.selectAll(".links")
+                            .remove()
+                            .transition()
+                    })
+                }
+                linkOff()
+
             }
         </script>
     </body>

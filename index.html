@@ -92,19 +92,19 @@
             var color = {"ne": "#D4A2E1", "hs": "#ECBB3D", "hl": "#C1DD45", "ss": "#55E0C6", "sl": "#73E162"}
 
             // Data Loading  // load datasets in sequence and then execute main function
-            d3.tsv("data-ne.txt", function(error, data) {
+            d3.tsv("https://rawgit.com/stephenrong/finalproject/master/data-ne.txt", function(error, data) {
                 data_ne = data
                 // console.log(data_ne)
-                d3.tsv("data-hs.txt", function(error, data) {
+                d3.tsv("https://rawgit.com/stephenrong/finalproject/master/data-ne.txt", function(error, data) {
                     data_hs = data
                     // console.log(data_hs)
-                    d3.tsv("data-hl.txt", function(error, data) {
+                    d3.tsv("https://rawgit.com/stephenrong/finalproject/master/data-ne.txt", function(error, data) {
                         data_hl = data
                         // console.log(data_hl)
-                        d3.tsv("data-ss.txt", function(error, data) {
+                        d3.tsv("https://rawgit.com/stephenrong/finalproject/master/data-ne.txt", function(error, data) {
                             data_ss = data
                             // console.log(data_ss)
-                            d3.tsv("data-sl.txt", function(error, data) {
+                            d3.tsv("https://rawgit.com/stephenrong/finalproject/master/data-ne.txt", function(error, data) {
                                 data_sl = data
                                 // console.log(data_sl)
                                 main()
@@ -151,7 +151,7 @@
                 keylist.splice(keylist.indexOf("SL1_1"), 1)
 
                 // Temporary Lists
-                var keylisttemp = ["DAF_1", "TajD_1", "FayWuH_1", "FST_1", "iHS_1"]
+                var keylisttemp = ["DAF_1", "TajD_1", "FST_1", "iHS_1"]
                 //["H1_1", "H2_1", "H2.H1_1", "TajD_1", "FayWuH_1", "XPEHH_12", "DXPEHH_12", "FST_1", "DDAF_1", "ZA_1"]
                 var keylistcomp = keylist.slice()
                 for (i = 0; i < keylisttemp.length; i++) {

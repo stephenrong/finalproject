@@ -4,27 +4,25 @@
 
 This is a final project for the [Interacting with Data](https://github.com/Brown-BIOL2430-S04-Fall2015/syllabus) seminar in fall 2015. 
 
+We present an interactive data exploration tool for comparing categories of observations across a high number of different metrics (up to about 10 measurements per observation) inspired by both radar charts and parallel coordinates. An application to population genetics is included. The interactive visualization of comparisons across scenarios of natural selection and across summary statistics for selection can give useful insight into which summary statistics are most useful for inferring different selection scenarios, and how similar or dissimilar aresummary statistics from each other.
 
-
-This project visualizes the relationships between different population genetic summary statistics for inferring selection in the genome, using a simulated dataset with examples of sites evolving under neutrality, hard sweeps, linked to hard sweeps, soft sweeps, and linked to soft sweeps along with their summary statistics.
-
-To view this project, ... (will finish later). 
-
-<!---(embed visualization here or provide instructions on how to view the project).--->
+Clone Git repository to view project.
 
 ## The data
 
-The dataset of summary statistics for sites evolving under models of neutrality, hard sweeps (selective sweeps from *de novo* mutations), and soft sweeps (selective sweeps from standing genetic variation) were simulated using the population genetic simulator *msms* (Ewing and Hermisson 2010) based on the human demographic model from Gravel et al. (2011). A representative subset of 2500 sites for each of five classes (neutral, hard sweep, linked to hard sweeps, soft sweeps, linked to soft sweeps) were used to make the visualization. Each row in the dataset corresponds to a simulated SNP, where the first column is the class label for the site, and the remaining columns are population genetic summary statistics for inferring selection at the SNP. Summary statistics include estimators of the population mutation rate theta, site frequency spectrum tests, linkage disequlibrium tests, population differentiation tests, haplotype frequency spectrum tests, and extended haplotype homozygosity (EHH) computed using the software *selscan* (Szpiech and Hernandez 2014). 
-
-Based on unpublished work.
+The dataset includes 300 examples each of genomic sites (single nucleotide polymorphisms) evolving under 5 different scenarios of natural selection: neutrally evolving, hard selective sweeps, neutrally linked sites to hard selective sweeps, soft selective sweeps, and neutrally linked sites to soft selective sweeps. These genomic sites were simulated using the population genetic simulator *msms* (Ewing and Hermisson 2010). For each genomic site, 24 different population genetic summary statistics were computed. These summary statistics span multiple genetic patterns expected to be different under selection than under neutrality: site frequency spectrum deviations, linkage disequilibrium, population differentiation, haplotype homozygosity, and integrated haplotype homozygosity. Integrated haplytpe homozygosity statistics were computed using *selscan* (Szpiech and Hernandez 2014). This dataset corresponds to natural selection in the African population of the human demographic model from Gravel et al. (2011). Based on unpublished research work.
 
 ## Background
 
-Population geneticists often use summary statistics to test for selection in the genome, and often scan the genome using multiple summary statistics that capture different signals in genetic variation. However, most studies do not distinguish between different modes of selection (neutral vs hard sweeps vs soft sweeps), and individual summary statistics do not have enough dimensions on which to separate out these different classes. Here, we use simulated data to visualize the histograms of summary statistics for different modes of selection, and visualize the scatterplots between pairs of summary statistics to see how well modes of selection are separated in different views of the data.
+Population geneticists often use summary statistics to test for selection in the genome, and often scan the genome using multiple summary statistics that capture different signals in genetic variation. However, most studies do not distinguish between different scenarios of selection, and individual summary statistics have reduced power to discriminate between different scenarios of selection. Both of these shortcomings can be overcome by combining information from many summary statistics spanning multiple genetic patterns.
 
-<!---Examples of previous visualizations of similar data or processes, if any exist... Include links or add images to markdown document... how were data mapped to aesthetics in these previous approaches? Was there filtering?--->
+Here, we're interested in interactive visualization as a means of gaining insight into the comparisions between different scenarios of selection and comparisons between different summary statistics. Comparing categories of observations based on their distributions in a high number of dimensions is a challenge for visualization, since there are a limited number of dimensions and a limited number of elements on which to map multi-variate measurments. Two previous ways of comparing observations across a high number of individual measurements have inspired the current work
 
-<!---Shortcomings of previous approaches, or potentially interesting gaps between previous approaches...--->
+Firstly, radar charts plot multivariate data for a single or multiple categories of observations across axes arranged in a circle. Polygons are drawn connecting the measurements on each axis to create links between the multivariate measurements for each observation, thus creating a continuity between different views of the data (the different axes), while also providing a shape to aid holistic comparisons. Most often, radar charts plot only point observations (e.g. http://bl.ocks.org/nbremer/6506614), however variations such as the radial boxplot can plot distributions with confidence intervals and outliers, such as a periodic time series (e.g. http://bl.ocks.org/davidwclin/ad5d13db260caeffe9b3). 
+
+Secondly, parallel coordinates plot multivariate data for a single or multiple categories of observations across axes arranged in parallel. Lines are drawn connecting measurements on each axis to create links between the multivariate measurements for each observation, thus again creating a continuity between different views of the data (the different axes). In contrast to radar charts, every line between multivariate measurements is draw in parallel coordinate visualizations (e.g. http://bl.ocks.org/mbostock/1341021), or alternatively, in Sankey diagrams, polygons representing continuity between categorical data are drawn (e.g. https://www.jasondavies.com/parallel-sets/).
+
+Here, we take elements from both approaches (radar charts and parallel coordinates) to visualize distributions across scenarios of selection and across symmary statistics.
 
 ## This project
 
@@ -59,9 +57,4 @@ Population geneticists often use summary statistics to test for selection in the
 <!---What are the main limitations of new approach?--->
 
 <!---What are future directions this could go in?--->
-
-## References
-
-
-
 

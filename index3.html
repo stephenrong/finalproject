@@ -29,11 +29,11 @@
             var padding = 100
             var width = w - margin.left - margin.right
             var height = h - margin.top - margin.bottom
-            var labelx = 25
+            var labelx = 30
             var labely = 25
 
             // Label Mapping
-            var cols = {"DAF_1": "DAF", 
+            var head = {"DAF_1": "DAF", 
                 "MAF_1": "MAF", 
                 "DDAF_1": "ΔDAF", 
                 "FST_1": "FST", 
@@ -117,6 +117,7 @@
                 var svg = body.append("svg")
                     .attr("width", w)
                     .attr("height", h)
+                // var xscale = d3.scale.linear().domain([-1*w/h, 1*w/h]).range([padding, w-padding])
                 var xscale = d3.scale.linear().domain([0, 1]).range([padding, w-padding])
                 var yscale = d3.scale.linear().domain([-1, 1]).range([h-padding, padding])
 
@@ -135,7 +136,7 @@
                 keylist.splice(keylist.indexOf("Theta1Xi_1"), 1)
 
                 // Temporary Lists
-                var keylisttemp = ["FST_1", "TajD_1", "H1_1", "DXPEHH_12"]
+                var keylisttemp = ["DDAF_1", "TajD_1", "H1_1", "ThetaPi_1"]
                 var keylistcomp = keylist.slice()
                 for (i = 0; i < keylisttemp.length; i++) {
                     keylistcomp.splice(keylistcomp.indexOf(keylisttemp[i]), 1)
@@ -146,74 +147,52 @@
                 // Axes
                 var axeslist = []
                 for (i = 0; i < keylist.length; i++) {
-                    max = d3.max(datafull, function(d) {
-                        if (d[keylist[i]] != "NA") {
-                            return d[keylist[i]]     
-                        }
-                    })
-                    min = d3.min(datafull, function(d) {
-                        return d[keylist[i]]
-                    })
-                    console.log(keylist[i])
-                    console.log(max)
-                    console.log(min)
-
                     axeslist.push(
                         d3.svg.axis()
-                            .scale(d3.scale.linear().domain([min, max]).range([h-padding, padding]))
+                            .scale(d3.scale.linear().domain([-1-i*0.1, 1+i*0.1]).range([h-padding, padding]))
                             .orient("left")
-                            .ticks(5)
+                            .ticks(10)
                     )
                 }
 
-                // Store displayed axes
                 var axestemp = []
                 for (i = 0; i < keylisttemp.length; i++) {
                     axestemp.push(axeslist[keylist.indexOf(keylisttemp[i])])
                 }
 
-                // Store hidden axes
                 var axescomp = []
                 for (i = 0; i < keylistcomp.length; i++) {
                     axescomp.push(axeslist[keylist.indexOf(keylistcomp[i])])
                 }
 
-                // Create displayed axes
                 for (i = 0; i < keylisttemp.length; i++) {
                     svg.append("g")
                         .transition()
                         .call(axestemp[i])
                         .attr("class", keylisttemp[i]+" axis")
                         .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
+
+                    // svg.append("text")
+                    //     //.transition()
+                    //     .attr("class", keylisttemp[i]+" label")
+                    //     .attr("x", (xscale((i+1)/(keylisttemp.length+1)))-labelx)
+                    //     .attr("y", (h-padding+labely))
+                    //     .text(head[keylisttemp[i]])
                 }
 
-                // Create displayed text
-                for (i = 0; i < keylisttemp.length; i++) {
-                    svg.append("text")
-                        //.transition()
-                        .attr("class", keylisttemp[i]+" label")
-                        .attr("y", (h-padding+labely))
-                        .text(cols[keylisttemp[i]])
-                        .attr("x", (xscale((i+1)/(keylisttemp.length+1)))-labelx)
-                }
-
-                // Create hidden axes
                 for (i = 0; i < keylistcomp.length; i++) {
                     svg.append("g")
                         .transition()
                         .call(axescomp[i])
                         .attr("class", keylistcomp[i]+" axis")
                         .attr("transform", "translate(-100, 0)")
-                }
 
-                // Create hidden text
-                for (i = 0; i < keylistcomp.length; i++) {
-                    svg.append("text")
-                        //.transition()
-                        .attr("class", keylistcomp[i]+" label")
-                        .attr("x", -100-labelx)
-                        .attr("y", (h-padding+labely))
-                        .text(cols[keylistcomp[i]])
+                    // svg.append("text")
+                    //     //.transition()
+                    //     .attr("class", keylistcomp[i]+" label")
+                    //     .attr("x", -100-labelx)
+                    //     .attr("y", (h-padding+labely))
+                    //     .text(head[keylistcomp[i]])
                 }
 
                 // List
@@ -222,25 +201,11 @@
                     .enter()
                     .append("p")
                     .text(function(d) {
-                        return d //cols[d] //because of header text
+                        return head[d]
                     })
 
-
-
-
-
-
-
-
-
-
-
-
-
                 // Transitions
-                // gaxes = svg.selectAll("g")
-
-                // Click on Label
+                // Add
                 body.selectAll("p")
                     .on("click", function() {
                         d3.select(this)
@@ -252,8 +217,8 @@
                         keylistcomp.splice(keylistcomp.indexOf(value), 1)
                         axestemp.push(axeslist[keylist.indexOf(keylisttemp[keylisttemp.length-1])])
                         axescomp.splice(axescomp.indexOf(value), 1)
-                        // console.log(keylisttemp)
-                        // console.log(keylistcomp)
+                        console.log(keylisttemp)
+                        console.log(keylistcomp)
 
                         for (i = 0; i < keylisttemp.length; i++) {
                             svg.select("."+keylisttemp[i]+".axis")
@@ -261,31 +226,20 @@
                                 .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
                         }
 
-                        for (i = 0; i < keylisttemp.length; i++) {
-                            svg.select("."+keylisttemp[i]+".label")
-                                .transition()
-                                .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
-                        }
+                        // for (i = 0; i < keylisttemp.length; i++) {
+                        //     svg.select("."+keylisttemp[i]+".label")
+                        //         .transition()
+                        //         .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
+                        // }
                     })
 
-                // Click on Axis
+                // Remove
                 svg.selectAll("g")
                     .on("click", function() {
                         temp = this.getAttribute("class").split(" ")[0]
                         if (temp != "tick") {
                             value = temp
                             console.log(value)
-
-                            body.append("p")
-                                .text(value)
-
-                            d3.select(this)
-                                .transition()
-                                .attr("transform", "translate(-100, 0)")
-
-                            d3.select("."+value+".label")
-                                .transition()
-                                .attr("x", -100-labelx)
 
                             keylistcomp.push(value)
                             keylisttemp.splice(keylisttemp.indexOf(value), 1)
@@ -294,20 +248,25 @@
                             console.log(keylisttemp)
                             console.log(keylistcomp)
 
+                            d3.select(this)
+                                .transition()
+                                .attr("transform", "translate(-100, 0)")
+
                             for (i = 0; i < keylisttemp.length; i++) {
                                 svg.select("."+keylisttemp[i]+".axis")
                                     .transition()
                                     .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
-                            }
-
-                            for (i = 0; i < keylisttemp.length; i++) {
-                                svg.select("."+keylisttemp[i]+".label")
-                                    .transition()
-                                    .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
+                                // svg.select("."+keylisttemp[i]+".label")
+                                //     .transition()
+                                //     .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
                             }
                         }
                     })
+
+                // Test
+                // svg.append("circle").attr("cx", xscale(0)).attr("cy", yscale(0)).attr("r", 5)
             }
+
         </script>
     </body>
 </html>

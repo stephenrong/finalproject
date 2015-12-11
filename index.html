@@ -23,7 +23,7 @@
         </style>
     </head>
     <body>
-        <h1>Summary Statistics for Selection - Stephen Rong - Biol 2430: Interacting with Data</h1>
+        <h1><font>Summary Statistics for Selection - Stephen Rong - Biol 2430: Interacting with Data</font></h1>
         <script type="text/javascript">
             // Preliminaries
             var body = d3.select("body")
@@ -307,47 +307,26 @@
                 }
 
                 // Legend
-                // for (j = 0; j < 5; j++) {
-                //     svg.append("circle")
-                //         .attr("cx", function(d) {
-                //             return xscale((j+2)/9)
-                //         })
-                //         .attr("cy", legendy)
-                //         .attr("r", r)
-                //         .attr("opacity", 1)
-                //         .style("fill", function(d){
-                //             return d3.values(color)[j]
-                //         })
+                for (j = 0; j < 5; j++) {
+                    svg.append("circle")
+                        .attr("cx", 150)
+                        .attr("cy", function() {
+                            return 20+14*j
+                        })
+                        .attr("r", r)
+                        .attr("opacity", 1)
+                        .style("fill", function(d){
+                            return d3.values(color)[j]
+                        })
 
-                //     svg.append("text")
-                //         .attr("x", function(d) {
-                //             return xscale((j+2)/9)+5
-                //         })
-                //         .attr("y", legendy+4)
-                //         .attr("font-size", 12)
-                //         .text(label[j])
-                // }
-
-                // for (j = 0; j < 5; j++) {
-                //     svg.append("circle")
-                //         .attr("cx", function(d) {
-                //             return xscale((j+1)/6.5)
-                //         })
-                //         .attr("cy", legendy)
-                //         .attr("r", r)
-                //         .attr("opacity", 1)
-                //         .style("fill", function(d){
-                //             return d3.values(color)[j]
-                //         })
-
-                //     svg.append("text")
-                //         .attr("x", function(d) {
-                //             return xscale((j+1)/6.5)+6
-                //         })
-                //         .attr("y", legendy)
-                //         .attr("font-size", 12)
-                //         .text(label[j])
-                // }
+                    svg.append("text")
+                        .attr("x", 150+5)
+                        .attr("y", function() {
+                            return 20+4+14*j
+                        })
+                        //.attr("font-size", 12)
+                        .text(label[j])
+                }
 
                 // Transitions
                 // Click on Label
@@ -495,16 +474,11 @@
                 clickAxis()
 
                 // Aesthetic Effects
-                // circles.on("mouseover", function() {
+                // d3.selectAll(keylisttemp[1]+1+" group").on("mouseover", function() {
                 //     d3.select(this)
-                //         .attr("r", 1.5*r)
+                //         .transition()
+                //         .attr("r", 10*r)
                 //         .attr("opacity", 1)
-                // })
-
-                // circles.on("mouseout", function() {
-                //     d3.select(this)
-                //         .attr("r", r)
-                //         .attr("opacity", o)
                 // })
             }
         </script>

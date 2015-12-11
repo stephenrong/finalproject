@@ -6,7 +6,7 @@ This is a final project for the [Interacting with Data](https://github.com/Brown
 
 We present an interactive data exploration tool for comparing categories of observations across a high number of different metrics (up to about 10 measurements per observation) inspired by both radar charts and parallel coordinates. An application to population genetics is included. The interactive visualization of comparisons across scenarios of natural selection and across summary statistics for selection can give useful insight into which summary statistics are most useful for inferring different selection scenarios, and how similar or dissimilar aresummary statistics from each other.
 
-Clone Git repository to view project.
+View project here: https://rawgit.com/stephenrong/finalproject/master/index.html
 
 ## The data
 

@@ -29,6 +29,52 @@
             var padding = 100
             var width = w - margin.left - margin.right
             var height = h - margin.top - margin.bottom
+            var labelx = 25
+            var labely = 25
+
+            // Label Mapping
+            var cols = {"DAF_1": "DAF", 
+                "MAF_1": "MAF", 
+                "DDAF_1": "ΔDAF", 
+                "FST_1": "FST", 
+                "ThetaPi_1": "θ_π", 
+                "ThetaS_1": "θ_S", 
+                "ThetaH_1": "θ_H", 
+                "ThetaL_1": "θ_L", 
+                "ThetaXi_1": "θ_ξ₁", 
+                "TajD_1": "Tajima's D", 
+                "FuLiF_1": "Fu and Li's F", 
+                "FuLiD_1": "Fu and Li's D", 
+                "FayWuH_1": "Fay and Wu's H", 
+                "ZengE_1": "Zeng et al.'s E",
+                "Theta1Pi_1": "θ1_π",
+                "Theta1S_1": "θ1_S", 
+                "Theta1H_1": "θ1_H", 
+                "Theta1L_1": "θ1_L", 
+                "Theta1Xi_1": "θ1_ξ₁", 
+                "TajD1_1": "Tajima1's D", 
+                "FuLiF1_1": "Fu and Li's1 D", 
+                "FuLiD1_1": "Fu and Li's1 D", 
+                "FayWuH1_1": "Fay and Wu's1 H", 
+                "ZengE1_1": "Zeng et al.'s1 E", 
+                "ZA_1": "Z_A", 
+                "H1_1": "H₁", 
+                "H2_1": "H₂", 
+                "H12_1": "H₁", 
+                "H2.H1_1": "H₂/H₁", 
+                "iHH1_1": "iHH₁", 
+                "iHH0_1": "iHH₀", 
+                "SL1_1": "SL₁", 
+                "SL0_1": "SL₀", 
+                "iHS_1": "iHS", 
+                "DiHH_1": "ΔiHH", 
+                "nSL_1": "nSL", 
+                "DnSL_1": "ΔnSL", 
+                "XPEHH_12": "XPEHH₁₂", 
+                "XPEHH_13": "XPEHH₁₃", 
+                "DXPEHH_12": "ΔXPEHH₁₂", 
+                "DXPEHH_13": "ΔXPEHH₁₃"
+            }
 
             // Data Variables
             var data_ne, data_hs, data_hl, data_ss, data_sl
@@ -109,16 +155,19 @@
                     )
                 }
 
+                // Store displayed axes
                 var axestemp = []
                 for (i = 0; i < keylisttemp.length; i++) {
                     axestemp.push(axeslist[keylist.indexOf(keylisttemp[i])])
                 }
 
+                // Store hidden axes
                 var axescomp = []
                 for (i = 0; i < keylistcomp.length; i++) {
                     axescomp.push(axeslist[keylist.indexOf(keylistcomp[i])])
                 }
 
+                // Create displayed axes
                 for (i = 0; i < keylisttemp.length; i++) {
                     svg.append("g")
                         .transition()
@@ -127,6 +176,17 @@
                         .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
                 }
 
+                // Create displayed text
+                for (i = 0; i < keylisttemp.length; i++) {
+                    svg.append("text")
+                        //.transition()
+                        .attr("class", keylisttemp[i]+" label")
+                        .attr("y", (h-padding+labely))
+                        .text(cols[keylisttemp[i]])
+                        .attr("x", (xscale((i+1)/(keylisttemp.length+1)))-labelx)
+                }
+
+                // Create hidden axes
                 for (i = 0; i < keylistcomp.length; i++) {
                     svg.append("g")
                         .transition()
@@ -135,19 +195,29 @@
                         .attr("transform", "translate(-100, 0)")
                 }
 
+                // Create hidden text
+                for (i = 0; i < keylistcomp.length; i++) {
+                    svg.append("text")
+                        //.transition()
+                        .attr("class", keylistcomp[i]+" label")
+                        .attr("x", -100-labelx)
+                        .attr("y", (h-padding+labely))
+                        .text(cols[keylistcomp[i]])
+                }
+
                 // List
                 body.selectAll("p")
                     .data(keylistcomp)
                     .enter()
                     .append("p")
                     .text(function(d) {
-                        return d
+                        return d //cols[d] //because of header text
                     })
 
                 // Transitions
                 // gaxes = svg.selectAll("g")
 
-                // Click on Name  // should transition from right
+                // Click on Label
                 body.selectAll("p")
                     .on("click", function() {
                         d3.select(this)
@@ -167,6 +237,12 @@
                                 .transition()
                                 .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
                         }
+
+                        for (i = 0; i < keylisttemp.length; i++) {
+                            svg.select("."+keylisttemp[i]+".label")
+                                .transition()
+                                .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
+                        }
                     })
 
                 // Click on Axis
@@ -177,9 +253,16 @@
                             value = temp
                             console.log(value)
 
+                            body.append("p")
+                                .text(value)
+
                             d3.select(this)
                                 .transition()
                                 .attr("transform", "translate(-100, 0)")
+
+                            d3.select("."+value+".label")
+                                .transition()
+                                .attr("x", -100-labelx)
 
                             keylistcomp.push(value)
                             keylisttemp.splice(keylisttemp.indexOf(value), 1)
@@ -192,6 +275,12 @@
                                 svg.select("."+keylisttemp[i]+".axis")
                                     .transition()
                                     .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
+                            }
+
+                            for (i = 0; i < keylisttemp.length; i++) {
+                                svg.select("."+keylisttemp[i]+".label")
+                                    .transition()
+                                    .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
                             }
                         }
                     })

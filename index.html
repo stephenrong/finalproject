@@ -38,7 +38,7 @@
             var labelx = 25
             var labely = 25
             var missingy = 50
-            var r = 3
+            var r = 4
             var o = 0.7
 
             // Label Mapping
@@ -143,6 +143,11 @@
                 keylist.splice(keylist.indexOf("Theta1H_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1L_1"), 1)
                 keylist.splice(keylist.indexOf("Theta1Xi_1"), 1)
+                keylist.splice(keylist.indexOf("TajD1_1"), 1)
+                keylist.splice(keylist.indexOf("FuLiF1_1"), 1)
+                keylist.splice(keylist.indexOf("FuLiD1_1"), 1)
+                keylist.splice(keylist.indexOf("FayWuH1_1"), 1)
+                keylist.splice(keylist.indexOf("ZengE1_1"), 1)
 
                 // Temporary Lists
                 var keylisttemp = ["H1_1", "TajD_1", "DXPEHH_12", "FST_1"]
@@ -247,6 +252,7 @@
 
                 // Missing Line
                 svg.append("line")
+                    .attr("class", "missingline")
                     .attr("x1", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
                     .attr("x2", (xscale((keylisttemp.length)/(keylisttemp.length+1))+r*(1+4*3)))
                     .attr("y1", (h-padding+missingy))
@@ -255,6 +261,7 @@
                     .attr("stroke", "#000")
 
                 svg.append("text")
+                    .attr("class", "missingtext")
                     .attr("x", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
                     .attr("y", (h-padding+missingy)+15)
                     .text("missing values")
@@ -276,6 +283,8 @@
                         circles.data(datatemp)
                             .enter()
                             .append("circle")
+                            //.attr("class", keylisttemp[i]+" group")
+                            .attr("class", keylisttemp[i]+j+" group")
                             .attr("cx", function(d){
                                 return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
                             })
@@ -296,68 +305,22 @@
                     }
                 }
 
-
-
-
-
-
-
-
-
-
+                // 
 
                 // Transitions
                 // Click on Label
-                body.selectAll("p")
-                    .on("click", function() {
-                        d3.select(this)
-                            .transition()
-                            .remove()
-                        value = this.innerHTML
-
-                        keylisttemp.push(value)
-                        keylistcomp.splice(keylistcomp.indexOf(value), 1)
-                        axestemp.push(axeslist[keylist.indexOf(keylisttemp[keylisttemp.length-1])])
-                        axescomp.splice(axescomp.indexOf(value), 1)
-                        // console.log(keylisttemp)
-                        // console.log(keylistcomp)
-
-                        for (i = 0; i < keylisttemp.length; i++) {
-                            svg.select("."+keylisttemp[i]+".axis")
-                                .transition()
-                                .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
-                        }
-
-                        for (i = 0; i < keylisttemp.length; i++) {
-                            svg.select("."+keylisttemp[i]+".label")
-                                .transition()
-                                .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
-                        }
-                    })
-
-                // Click on Axis
-                svg.selectAll("g")
-                    .on("click", function() {
-                        temp = this.getAttribute("class").split(" ")[0]
-                        if (temp != "tick") {
-                            value = temp
-                            // console.log(value)
-
-                            body.append("p")
-                                .text(value)
-
+                function clickLabel() {
+                    body.selectAll("p")
+                        .on("click", function() {
                             d3.select(this)
                                 .transition()
-                                .attr("transform", "translate(-100, 0)")
+                                .remove()
+                            value = this.innerHTML
 
-                            d3.select("."+value+".label")
-                                .transition()
-                                .attr("x", -100-labelx)
-
-                            keylistcomp.push(value)
-                            keylisttemp.splice(keylisttemp.indexOf(value), 1)
-                            axescomp.push(axeslist[keylist.indexOf(keylistcomp[keylistcomp.length-1])])
-                            axestemp.splice(axestemp.indexOf(value), 1)
+                            keylisttemp.push(value)
+                            keylistcomp.splice(keylistcomp.indexOf(value), 1)
+                            axestemp.push(axeslist[keylist.indexOf(keylisttemp[keylisttemp.length-1])])
+                            axescomp.splice(axescomp.indexOf(value), 1)
                             // console.log(keylisttemp)
                             // console.log(keylistcomp)
 
@@ -372,8 +335,122 @@
                                     .transition()
                                     .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
                             }
-                        }
-                    })
+
+                            for (j = 0; j < 5; j++) {
+                                for (i = 0; i < keylisttemp.length; i++) {
+                                    svg.selectAll("."+keylisttemp[i]+j+".group")
+                                        .transition()
+                                        .attr("cx", (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3)))
+                                }
+                            }
+
+                            for (j = 0; j < 5; j++) {
+                                var datatemp = datalist[j]
+                                i = keylisttemp.length-1
+                                circles.data(datatemp)
+                                    .enter()
+                                    .append("circle")
+                                    //.attr("class", keylisttemp[i]+" group")
+                                    .attr("class", keylisttemp[i]+j+" group")
+                                    .attr("cx", function(d){
+                                        return (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3))
+                                    })
+                                    .attr("cy", function(d){
+                                        scale = scalelist[keylist.indexOf(keylisttemp[i])]
+                                        yvalue = d[keylisttemp[i]]
+                                        if (yvalue != "NA") {
+                                            return scale(yvalue)
+                                        } else {
+                                            return h-padding+missingy
+                                        }
+                                    })
+                                    .attr("r", r)
+                                    .attr("opacity", o)
+                                    .style("fill", function(d){
+                                        return d3.values(color)[j]
+                                    })
+                            }
+
+                            svg.select(".missingline")
+                                .transition()
+                                .attr("x1", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+                                .attr("x2", (xscale((keylisttemp.length)/(keylisttemp.length+1))+r*(1+4*3)))
+
+                            svg.select(".missingtext")
+                                .transition()
+                                .attr("x", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+
+                            clickAxis()
+                        })
+                }
+                clickLabel()
+
+                // Click on Axis
+                function clickAxis() {
+                    svg.selectAll("g")
+                        .on("click", function() {
+                            temp = this.getAttribute("class").split(" ")[0]
+                            if (temp != "tick") {
+                                value = temp
+                                // console.log(value)
+
+                                body.append("p")
+                                    .text(value)
+
+                                d3.select(this)
+                                    .transition()
+                                    .attr("transform", "translate(-100, 0)")
+
+                                d3.select("."+value+".label")
+                                    .transition()
+                                    .attr("x", -100-labelx)
+
+                                for (j = 0; j < 5; j++) {
+                                    d3.selectAll("."+value+j+".group")
+                                        .remove()
+                                }
+
+                                keylistcomp.push(value)
+                                keylisttemp.splice(keylisttemp.indexOf(value), 1)
+                                axescomp.push(axeslist[keylist.indexOf(keylistcomp[keylistcomp.length-1])])
+                                axestemp.splice(axestemp.indexOf(value), 1)
+                                // console.log(keylisttemp)
+                                // console.log(keylistcomp)
+
+                                for (i = 0; i < keylisttemp.length; i++) {
+                                    svg.select("."+keylisttemp[i]+".axis")
+                                        .transition()
+                                        .attr("transform", "translate(" + (xscale((i+1)/(keylisttemp.length+1))) + ",0)")
+                                }
+
+                                for (i = 0; i < keylisttemp.length; i++) {
+                                    svg.select("."+keylisttemp[i]+".label")
+                                        .transition()
+                                        .attr("x", (xscale((i+1)/(keylisttemp.length+1))-labelx))
+                                }
+
+                                for (j = 0; j < 5; j++) {
+                                    for (i = 0; i < keylisttemp.length; i++) {
+                                        svg.selectAll("."+keylisttemp[i]+j+".group")
+                                            .transition()
+                                            .attr("cx", (xscale((i+1)/(keylisttemp.length+1))+r*(1+j*3)))
+                                    }
+                                }
+
+                                svg.select(".missingline")
+                                    .transition()
+                                    .attr("x1", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+                                    .attr("x2", (xscale((keylisttemp.length)/(keylisttemp.length+1))+r*(1+4*3)))
+
+                                svg.select(".missingtext")
+                                    .transition()
+                                    .attr("x", (xscale((1)/(keylisttemp.length+1))+r*(1+0*3)))
+
+                                clickLabel()
+                            }
+                        })
+                }
+                clickAxis()
             }
         </script>
     </body>
